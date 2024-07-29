@@ -11,9 +11,16 @@ import TasksSeparator from "./TasksSeparator";
 import { useState } from "react";
 import TasksConst from "../constants/tasks";
 import TaskItem from "./TaskItem";
+import { toast } from "sonner";
 
 const Tasks = () => {
   const [tasks, setState] = useState(TasksConst);
+
+  const handleTaskDeleteClick = (taskId) => {
+    const newTasks = tasks.filter((task) => task.id != taskId);
+    setState(newTasks);
+    toast.success("Tarefa deletada com sucesso!");
+  };
 
   const handleTaskCheckboxClick = (taskId) => {
     const newTask = tasks.map((task) => {
@@ -21,12 +28,15 @@ const Tasks = () => {
         return task;
       }
       if (task.status == "not_started") {
+        toast.success("Tarefa Iniciada");
         return { ...task, status: "in_progress" };
       }
       if (task.status == "in_progress") {
+        toast.success("Tarefa Concluida");
         return { ...task, status: "done" };
       }
       if (task.status == "done") {
+        toast.success("Tarefa Reiniciada com sucesso!");
         return { ...task, status: "not_started" };
       }
     });
@@ -67,7 +77,8 @@ const Tasks = () => {
               <TaskItem
                 key={task.id}
                 task={task}
-                handleTaskCheckboxClick={handleTaskCheckboxClick}
+                handleCheckboxClick={handleTaskCheckboxClick}
+                handleDeleteClick={handleTaskDeleteClick}
               />
             );
           })}
@@ -80,7 +91,8 @@ const Tasks = () => {
               <TaskItem
                 key={task.id}
                 task={task}
-                handleTaskCheckboxClick={handleTaskCheckboxClick}
+                handleCheckboxClick={handleTaskCheckboxClick}
+                handleDeleteClick={handleTaskDeleteClick}
               />
             );
           })}
@@ -93,7 +105,8 @@ const Tasks = () => {
               <TaskItem
                 key={task.id}
                 task={task}
-                handleTaskCheckboxClick={handleTaskCheckboxClick}
+                handleCheckboxClick={handleTaskCheckboxClick}
+                handleDeleteClick={handleTaskDeleteClick}
               />
             );
           })}

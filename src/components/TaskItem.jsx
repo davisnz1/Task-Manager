@@ -5,7 +5,7 @@ import TrashIcon from "../assets/icons/trash.svg?react";
 
 import Button from "../components/Button";
 
-const TaskItem = ({ task, handleTaskCheckboxClick }) => {
+const TaskItem = ({ task, handleCheckboxClick, handleDeleteClick }) => {
   const getStatusClasses = () => {
     if (task.status == "done") {
       return "bg-[#00ADB5] text-[#00ADB5]";
@@ -29,7 +29,7 @@ const TaskItem = ({ task, handleTaskCheckboxClick }) => {
           type="checkbox"
           checked={task.status === "done"}
           className="absolute h-full w-full cursor-pointer opacity-0"
-          onClick={() => handleTaskCheckboxClick(task.id)}
+          onClick={() => handleCheckboxClick(task.id)}
         />
         {task.status === "done" && <CheckIcon />}
         {task.status === "in_progress" && (
@@ -39,8 +39,8 @@ const TaskItem = ({ task, handleTaskCheckboxClick }) => {
       <div className="flex w-full justify-between">
         {task.title}
         <a href="#" className="flex items-center">
-          <Button variant="ghost">
-            <TrashIcon className="text-[#9A9C9F]" />
+          <Button variant="ghost" onClick={() => handleDeleteClick(task.id)}>
+            <TrashIcon className="text-transparent" />
           </Button>
           <AboutButton />
         </a>
