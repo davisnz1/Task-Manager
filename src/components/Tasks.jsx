@@ -3,12 +3,14 @@ import { toast } from "sonner";
 
 import { AddIcon, Afternoon, Moon, Sun, TrashIcon } from "../assets/icons";
 import TasksConst from "../constants/tasks";
+import AddTaskDialog from "./AddTaskDialog";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
 import TasksSeparator from "./TasksSeparator";
 
 const Tasks = () => {
   const [tasks, setState] = useState(TasksConst);
+  const [addTasksDialogIsOpen, setAddTasksDialogIsOpen] = useState(false);
 
   const handleTaskDeleteClick = (taskId) => {
     const newTasks = tasks.filter((task) => task.id != taskId);
@@ -52,15 +54,20 @@ const Tasks = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="ghost">
+          <Button size="small" variant="ghost">
             Limpar Tarefas
             <TrashIcon />
           </Button>
 
-          <Button variant="primary">
+          <Button size="small" onClick={() => setAddTasksDialogIsOpen(true)}>
             Nova Tarefa
             <AddIcon />
           </Button>
+
+          <AddTaskDialog
+            isOpen={addTasksDialogIsOpen}
+            handleClose={() => setAddTasksDialogIsOpen(false)}
+          />
         </div>
       </div>
       <div className="font-poppins bg-white mt-6 pb-8 rounded-xl">
