@@ -1,6 +1,6 @@
 import InputLabel from "./InputLabel";
 
-const InputAddTask = ({ label, ...rest }) => {
+const InputAddTask = ({ label, error, ...rest }) => {
   return (
     <div className="space-y-1">
       <InputLabel htmlFor={rest.id}>{label}</InputLabel>
@@ -10,6 +10,7 @@ const InputAddTask = ({ label, ...rest }) => {
         type="text"
         {...rest}
       />
+      {error && <p className="text-xs pt-1 text-red-500">{error.message}</p>}
     </div>
   );
 };
