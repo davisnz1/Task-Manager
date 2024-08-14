@@ -7,8 +7,8 @@ const DialogSelect = (props) => {
 
       <select
         id="time"
-        className="w-full px-4 mt-1 py-3 border-solid border border-[#ECECEC] rounded-lg outline-[#00ADB5] 
-                    placeholder:text-sm placeholder:text-[#9A9C9F]"
+        className="w-full px-4 mt-1 py-3 border-solid border border-[#ECECEC] rounded-lg outline-brand-primary 
+                    placeholder:text-sm placeholder:text-brand-text-gray"
         {...props}
       >
         <option value="morning">Manhã</option>

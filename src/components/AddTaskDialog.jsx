@@ -88,7 +88,7 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
             <div className="shadow-lg p-5 font-poppins bg-white rounded-xl">
               <div className="p-5 text-center bg-white">
                 <h1 className="text-2xl font-bold ">Nova Tarefa</h1>
-                <p className="text-xs text-[#9A9C9F] mt-1">
+                <p className="text-xs text-[brand-text-gray] mt-1">
                   Insira as informações abaixo
                 </p>
               </div>
@@ -143,5 +143,3 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
 };
 
 export default AddTaskDialog;
-
-/* Incio do Repositorio */

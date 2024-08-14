@@ -5,8 +5,8 @@ const InputAddTask = ({ label, error, ...rest }) => {
     <div className="space-y-1">
       <InputLabel htmlFor={rest.id}>{label}</InputLabel>
       <input
-        className="w-full px-4 py-3 border-solid border border-[#ECECEC] rounded-lg outline-[#00ADB5] 
-        placeholder:text-sm placeholder:text-[#9A9C9F]"
+        className="w-full px-4 py-3 border-solid border border-[#ECECEC] rounded-lg outline-brand-primary
+        placeholder:text-sm placeholder:text-brand-text-gray"
         type="text"
         {...rest}
       />
