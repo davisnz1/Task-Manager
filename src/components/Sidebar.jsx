@@ -17,12 +17,12 @@ const Sidebar = () => {
         </p>
       </div>
       <div className="font-poppins flex flex-col px-2 gap-2">
-        <SidebarButton variant="unselected">
+        <SidebarButton color="unselected">
           <HomeIcon />
           Início
         </SidebarButton>
 
-        <SidebarButton variant="selected">
+        <SidebarButton color="selected">
           <TaskIcon />
           Minhas Tarefas
         </SidebarButton>

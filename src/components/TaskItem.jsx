@@ -35,7 +35,7 @@ const TaskItem = ({ task, handleCheckboxClick, handleDeleteClick }) => {
       <div className="flex w-full justify-between">
         {task.title}
         <a href="#" className="flex items-center">
-          <Button variant="ghost" onClick={() => handleDeleteClick(task.id)}>
+          <Button color="ghost" onClick={() => handleDeleteClick(task.id)}>
             <TrashIcon className="text-transparent" />
           </Button>
           <AboutButton />

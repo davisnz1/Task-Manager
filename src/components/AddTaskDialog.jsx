@@ -120,14 +120,14 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
                 <Button
                   className="bg-[#EEEEEE] text-black"
                   size="big"
-                  variant="ghost"
+                  color="ghost"
                   onClick={handleClose}
                 >
                   Cancelar
                 </Button>
                 <Button
                   size="big"
-                  variant="primary"
+                  color="primary"
                   onClick={() => handleSaveClick()}
                 >
                   Salvar
