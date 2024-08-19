@@ -1,3 +1,5 @@
+import PropTypes from "prop-types";
+
 import InputLabel from "./InputLabel";
 
 const InputAddTask = ({ label, error, ...rest }) => {
@@ -13,6 +15,11 @@ const InputAddTask = ({ label, error, ...rest }) => {
       {error && <p className="text-xs pt-1 text-red-500">{error.message}</p>}
     </div>
   );
+};
+
+InputAddTask.propTypes = {
+  label: PropTypes.string.isRequired,
+  error: PropTypes.string,
 };
 
 export default InputAddTask;

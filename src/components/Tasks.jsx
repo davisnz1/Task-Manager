@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -121,6 +122,13 @@ const Tasks = () => {
       </div>
     </div>
   );
+};
+
+Tasks.propTypes = {
+  task: PropTypes.string,
+  handleAddTaskSubmit: PropTypes.func,
+  handleCheckboxClick: PropTypes.func,
+  handleDeleteClick: PropTypes.func,
 };
 
 export default Tasks;
