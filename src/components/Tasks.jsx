@@ -1,23 +1,29 @@
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AddIcon, Afternoon, Moon, Sun, TrashIcon } from "../assets/icons";
-import TasksConst from "../constants/tasks";
 import AddTaskDialog from "./AddTaskDialog";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
 import TasksSeparator from "./TasksSeparator";
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState(TasksConst);
+  const [tasks, setTasks] = useState([]);
   const [addTasksDialogIsOpen, setAddTasksDialogIsOpen] = useState(false);
 
-  const handleTaskDeleteClick = (taskId) => {
-    const newTasks = tasks.filter((task) => task.id != taskId);
-    setTasks(newTasks);
-    toast.success("Tarefa deletada com sucesso!");
-  };
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const response = await fetch("http://localhost:3000/tasks", {
+        method: "GET",
+      });
+
+      const tasks = await response.json();
+      setTasks(tasks);
+    };
+
+    fetchTasks();
+  });
 
   const handleTaskCheckboxClick = (taskId) => {
     const newTask = tasks.map((task) => {
@@ -40,7 +46,29 @@ const Tasks = () => {
     setTasks(newTask);
   };
 
-  const handleAddTaskSubmit = (task) => {
+  const handleTaskDeleteClick = async (taskId) => {
+    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      return toast.error("Tarefa deletada com sucesso!");
+    }
+
+    const newTasks = tasks.filter((task) => task.id != taskId);
+    setTasks(newTasks);
+    toast.success("Tarefa deletada com sucesso!");
+  };
+
+  const handleAddTaskSubmit = async (task) => {
+    const response = await fetch("http://localhost:3000/tasks", {
+      method: "POST",
+      body: JSON.stringify(task),
+    });
+    if (response.ok) {
+      return toast.error("Erro ao adicionar a tarefa. Tente novamente");
+    }
+
+    console.log({ response });
     setTasks([...tasks, task]);
     toast.success("Tarefa Adicionada com Sucesso");
   };
