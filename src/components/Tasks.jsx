@@ -23,38 +23,10 @@ const Tasks = () => {
     };
 
     fetchTasks();
-  });
+  }, []);
 
-  const handleTaskCheckboxClick = (taskId) => {
-    const newTask = tasks.map((task) => {
-      if (task.id != taskId) {
-        return task;
-      }
-      if (task.status == "not_started") {
-        toast.success("Tarefa Iniciada");
-        return { ...task, status: "in_progress" };
-      }
-      if (task.status == "in_progress") {
-        toast.success("Tarefa Concluida");
-        return { ...task, status: "done" };
-      }
-      if (task.status == "done") {
-        toast.success("Tarefa Reiniciada com sucesso!");
-        return { ...task, status: "not_started" };
-      }
-    });
-    setTasks(newTask);
-  };
-
-  const handleTaskDeleteClick = async (taskId) => {
-    const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      return toast.error("Tarefa deletada com sucesso!");
-    }
-
-    const newTasks = tasks.filter((task) => task.id != taskId);
+  const onTaskDeleteSucess = async (taskId) => {
+    const newTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(newTasks);
     toast.success("Tarefa deletada com sucesso!");
   };
@@ -62,24 +34,47 @@ const Tasks = () => {
   const handleAddTaskSubmit = async (task) => {
     const response = await fetch("http://localhost:3000/tasks", {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(task),
     });
-    if (response.ok) {
-      return toast.error("Erro ao adicionar a tarefa. Tente novamente");
+
+    if (!response.ok) {
+      toast.error("Erro ao adicionar a tarefa. Tente novamente");
+      return;
     }
 
-    console.log({ response });
     setTasks([...tasks, task]);
     toast.success("Tarefa Adicionada com Sucesso");
   };
 
-  const morningTasks = tasks.filter((task) => task.time == "morning");
-  const afternoonTasks = tasks.filter((task) => task.time == "afternoon");
-  const eveningTasks = tasks.filter((task) => task.time == "evening");
+  const handleTaskCheckboxClick = (taskId) => {
+    const newTasks = tasks.map((task) => {
+      if (task.id !== taskId) {
+        return task;
+      } else if (task.status === "not_started") {
+        toast.success("Tarefa Iniciada");
+        return { ...task, status: "in_progress" };
+      } else if (task.status === "in_progress") {
+        toast.success("Tarefa Concluida");
+        return { ...task, status: "done" };
+      } else if (task.status === "done") {
+        toast.success("Tarefa Reiniciada com sucesso!");
+        return { ...task, status: "not_started" };
+      }
+      return task;
+    });
+    setTasks(newTasks);
+  };
+
+  const morningTasks = tasks.filter((task) => task.time === "morning");
+  const afternoonTasks = tasks.filter((task) => task.time === "afternoon");
+  const eveningTasks = tasks.filter((task) => task.time === "evening");
 
   return (
     <div className="w-full px-8 py-16">
-      <div className="flex  w-full justify-between">
+      <div className="flex w-full justify-between">
         <div className="font-poppins">
           <span className="text-xs font-semibold text-brand-primary">
             Minhas tarefas
@@ -88,7 +83,7 @@ const Tasks = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button size="small" color="ghost">
+          <Button size="small" color="ghost" onClick={() => setTasks([])}>
             Limpar Tarefas
             <TrashIcon />
           </Button>
@@ -108,44 +103,38 @@ const Tasks = () => {
       <div className="font-poppins bg-white mt-6 pb-8 rounded-xl">
         <div>
           <TasksSeparator icon={<Sun />} title="Manhã" />
-          {morningTasks.map((task) => {
-            return (
-              <TaskItem
-                key={task.id}
-                task={task}
-                handleCheckboxClick={handleTaskCheckboxClick}
-                handleDeleteClick={handleTaskDeleteClick}
-              />
-            );
-          })}
+          {morningTasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleCheckboxClick={handleTaskCheckboxClick}
+              onDeleteSucess={onTaskDeleteSucess}
+            />
+          ))}
         </div>
 
         <div>
           <TasksSeparator icon={<Afternoon />} title="Tarde" />
-          {afternoonTasks.map((task) => {
-            return (
-              <TaskItem
-                key={task.id}
-                task={task}
-                handleCheckboxClick={handleTaskCheckboxClick}
-                handleDeleteClick={handleTaskDeleteClick}
-              />
-            );
-          })}
+          {afternoonTasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleCheckboxClick={handleTaskCheckboxClick}
+              onDeleteSucess={onTaskDeleteSucess}
+            />
+          ))}
         </div>
 
         <div>
           <TasksSeparator icon={<Moon />} title="Noite" />
-          {eveningTasks.map((task) => {
-            return (
-              <TaskItem
-                key={task.id}
-                task={task}
-                handleCheckboxClick={handleTaskCheckboxClick}
-                handleDeleteClick={handleTaskDeleteClick}
-              />
-            );
-          })}
+          {eveningTasks.map((task) => (
+            <TaskItem
+              key={task.id}
+              task={task}
+              handleCheckboxClick={handleTaskCheckboxClick}
+              onDeleteSucess={onTaskDeleteSucess}
+            />
+          ))}
         </div>
       </div>
     </div>
@@ -154,7 +143,7 @@ const Tasks = () => {
 
 Tasks.propTypes = {
   task: PropTypes.string,
-  handleAddTaskSubmit: PropTypes.func,
+
   handleCheckboxClick: PropTypes.func,
   handleDeleteClick: PropTypes.func,
 };
