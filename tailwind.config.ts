@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-export default {
+import type { Config } from "tailwindcss";
+
+const config: Config = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     fontFamily: {
@@ -11,7 +12,6 @@ export default {
           "dark-blue": "#AEAFB1",
           primary: "#00ADB5",
           "dark-gray": "#818181",
-          "": "#9A9C9F",
           "light-gray": "#EEEEEE",
           white: "#FFFFFF",
           background: "#F8F8F8",
@@ -23,3 +23,5 @@ export default {
   },
   plugins: [],
 };
+
+export default config;
