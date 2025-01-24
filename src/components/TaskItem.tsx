@@ -1,11 +1,30 @@
-import PropTypes from "prop-types";
+import React from "react";
+
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { AboutButton, CheckIcon, LoaderIcon, TrashIcon } from "../assets/icons";
-import Button from "../components/Button";
+import Button from "./Button";
 
-const TaskItem = ({ task, onDeleteSucess, handleCheckboxClick }) => {
+interface Task {
+  id: number;
+  title: string;
+  description?: string;
+  time: "morning" | "afternoon" | "evening";
+  status: "done" | "in_progress" | "not_started";
+}
+
+interface TaskItemProps {
+  task: Task;
+  onDeleteSucess: (taskId: number) => void;
+  handleCheckboxClick: (taskId: number) => void;
+}
+
+const TaskItem = ({
+  task,
+  onDeleteSucess,
+  handleCheckboxClick,
+}: TaskItemProps) => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
 
   const handleDeleteClick = async () => {
@@ -13,22 +32,24 @@ const TaskItem = ({ task, onDeleteSucess, handleCheckboxClick }) => {
     const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
       method: "DELETE",
     });
+
     if (!response.ok) {
       setDeleteIsLoading(false);
       return toast.error("Erro ao deletar a tarefa");
     }
+
     onDeleteSucess(task.id);
     setDeleteIsLoading(false);
   };
 
   const getStatusClasses = () => {
-    if (task.status == "done") {
+    if (task.status === "done") {
       return "bg-brand-primary text-brand-primary";
     }
-    if (task.status == "in_progress") {
+    if (task.status === "in_progress") {
       return "bg-brand-process text-brand-brand-danger";
     }
-    if (task.status == "not_started") {
+    if (task.status === "not_started") {
       return "bg-brand-dark-blue bg-opacity-10 text-dark-blue";
     }
   };
@@ -70,18 +91,6 @@ const TaskItem = ({ task, onDeleteSucess, handleCheckboxClick }) => {
       </div>
     </div>
   );
-};
-
-TaskItem.propTypes = {
-  task: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    time: PropTypes.oneOf(["morning", "afternoon", "evening"]).isRequired,
-    status: PropTypes.oneOf(["done", "in_progress", "not_started"]).isRequired,
-  }),
-  handleCheckboxClick: PropTypes.func.isRequired,
-  handleDeleteClick: PropTypes.func.isRequired,
 };
 
 export default TaskItem;

@@ -1,5 +1,4 @@
-import PropTypes from "prop-types";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { AddIcon, Afternoon, Moon, Sun, TrashIcon } from "../assets/icons";
@@ -8,30 +7,53 @@ import Button from "./Button";
 import TaskItem from "./TaskItem";
 import TasksSeparator from "./TasksSeparator";
 
+interface Task {
+  id: number; // Assegure-se de que o `id` seja do tipo número
+  title: string;
+  status: "not_started" | "in_progress" | "done";
+  time: "morning" | "afternoon" | "evening";
+}
+
 const Tasks = () => {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState<Task[]>([]); // Define que tasks é um array de Task
   const [addTasksDialogIsOpen, setAddTasksDialogIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
-      const response = await fetch("http://localhost:3000/tasks", {
-        method: "GET",
-      });
+      try {
+        const response = await fetch("http://localhost:3000/tasks", {
+          method: "GET",
+        });
 
-      const tasks = await response.json();
-      setTasks(tasks);
+        if (!response.ok) {
+          toast.error("Erro ao carregar tarefas.");
+          return;
+        }
+
+        const fetchedTasks: Task[] = await response.json();
+
+        // Verifica se o status é válido
+        const validatedTasks: Task[] = fetchedTasks.map((task) => ({
+          ...task,
+          status: task.status as "not_started" | "in_progress" | "done",
+        }));
+
+        setTasks(validatedTasks); // Atualiza o estado com os dados validados
+      } catch (error) {
+        toast.error("Erro ao carregar tarefas.");
+      }
     };
 
     fetchTasks();
   }, []);
 
-  const onTaskDeleteSucess = async (taskId) => {
+  const onTaskDeleteSucess = async (taskId: number) => {
     const newTasks = tasks.filter((task) => task.id !== taskId);
     setTasks(newTasks);
     toast.success("Tarefa deletada com sucesso!");
   };
 
-  const handleAddTaskSubmit = async (task) => {
+  const handleAddTaskSubmit = async (task: Task): Promise<void> => {
     const response = await fetch("http://localhost:3000/tasks", {
       method: "POST",
       headers: {
@@ -45,12 +67,13 @@ const Tasks = () => {
       return;
     }
 
-    setTasks([...tasks, task]);
+    const newTask: Task = await response.json();
+    setTasks((prevTasks) => [...prevTasks, newTask]);
     toast.success("Tarefa Adicionada com Sucesso");
   };
 
-  const handleTaskCheckboxClick = (taskId) => {
-    const newTasks = tasks.map((task) => {
+  const handleTaskCheckboxClick = (taskId: number) => {
+    const newTasks = tasks.map((task): Task => {
       if (task.id !== taskId) {
         return task;
       } else if (task.status === "not_started") {
@@ -139,13 +162,6 @@ const Tasks = () => {
       </div>
     </div>
   );
-};
-
-Tasks.propTypes = {
-  task: PropTypes.string,
-
-  handleCheckboxClick: PropTypes.func,
-  handleDeleteClick: PropTypes.func,
 };
 
 export default Tasks;

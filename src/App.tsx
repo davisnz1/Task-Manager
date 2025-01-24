@@ -1,7 +1,9 @@
+import React from "react";
+
 import { Toaster } from "sonner";
 
-import Sidebar from "./components/Sidebar.jsx";
-import Tasks from "./components/Tasks.jsx";
+import Sidebar from "./components/Sidebar";
+import Tasks from "./components/Tasks";
 
 function App() {
   return (

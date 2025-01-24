@@ -1,6 +1,6 @@
 import "./AddTaskDialog.css";
+import React from "react";
 
-import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
@@ -10,13 +10,38 @@ import Button from "./Button";
 import DialogSelect from "./DialogSelect";
 import Input from "./Input";
 
-const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
-  const [title, setTitle] = useState();
-  const [time, setTime] = useState("morning");
-  const [description, setDescription] = useState();
-  const [errors, setErrors] = useState([]);
+interface AddTaskDialogProps {
+  isOpen: boolean;
+  handleClose: () => void;
+  handleSubmit: (task: Task) => Promise<void>;
+}
 
-  const nodeRef = useRef();
+interface Task {
+  id: any;
+  title: string;
+  description: string;
+  time: "morning" | "afternoon" | "evening";
+  status: "not_started" | "in_progress" | "done";
+}
+
+interface Error {
+  inputName: string;
+  message: string;
+}
+
+const AddTaskDialog = ({
+  isOpen,
+  handleClose,
+  handleSubmit,
+}: AddTaskDialogProps) => {
+  const [title, setTitle] = useState<string>("");
+  const [time, setTime] = useState<"morning" | "afternoon" | "evening">(
+    "morning"
+  );
+  const [description, setDescription] = useState<string>("");
+  const [errors, setErrors] = useState<Error[]>([]);
+
+  const nodeRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isOpen) {
@@ -27,7 +52,7 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
   }, [isOpen]);
 
   const handleSaveClick = () => {
-    const newErrors = [];
+    const newErrors: Error[] = [];
 
     if (!title.trim()) {
       newErrors.push({
@@ -67,9 +92,9 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
     handleClose();
   };
 
-  const titleError = errors.find((error) => error.inputName == "title");
+  const titleError = errors.find((error) => error.inputName === "title");
   const descriptionError = errors.find(
-    (error) => error.inputName == "description"
+    (error) => error.inputName === "description"
   );
 
   return (
@@ -105,7 +130,11 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
 
                 <DialogSelect
                   value={time}
-                  onChange={(event) => setTime(event.target.value)}
+                  onChange={(event) =>
+                    setTime(
+                      event.target.value as "morning" | "afternoon" | "evening"
+                    )
+                  }
                 />
 
                 <Input
@@ -141,12 +170,6 @@ const AddTaskDialog = ({ isOpen, handleClose, handleSubmit }) => {
       </div>
     </CSSTransition>
   );
-};
-
-AddTaskDialog.propTypes = {
-  isOpen: PropTypes.bool,
-  handleClose: PropTypes.func,
-  handleSubmit: PropTypes.func,
 };
 
 export default AddTaskDialog;

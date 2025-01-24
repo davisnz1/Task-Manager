@@ -1,5 +1,13 @@
-import PropTypes from "prop-types";
+import { ButtonHTMLAttributes, ReactNode } from "react";
 import { tv } from "tailwind-variants";
+import React from "react";
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  children: ReactNode;
+  size?: "small" | "big";
+  color?: "primary" | "ghost";
+  className?: string;
+}
 
 const Button = ({
   children,
@@ -7,13 +15,13 @@ const Button = ({
   color = "primary",
   className,
   ...rest
-}) => {
+}: ButtonProps) => {
   const button = tv({
     base: "flex items-center gap-1 rounded-md font-semibold",
     variants: {
       color: {
         primary: "bg-brand-primary text-white",
-        ghost: "bg-tranparent text-brand-dark-gray",
+        ghost: "bg-transparent text-brand-dark-gray",
       },
       size: {
         small: "px-3 py-1 text-xs",
@@ -31,14 +39,6 @@ const Button = ({
       {children}
     </button>
   );
-};
-
-Button.propTypes = {
-  children: PropTypes.node.isRequired,
-  size: PropTypes.oneOf(["small", "big"]),
-  color: PropTypes.oneOf(["primary", "ghost"]),
-  className: PropTypes.string,
-  rest: PropTypes.any,
 };
 
 export default Button;

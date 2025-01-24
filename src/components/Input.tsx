@@ -1,8 +1,13 @@
-import PropTypes from "prop-types";
-
 import InputLabel from "./InputLabel";
+import React from "react";
 
-const InputAddTask = ({ label, error, ...rest }) => {
+interface InputAddTaskProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  error?: { message: string };
+}
+
+const InputAddTask = ({ label, error, ...rest }: InputAddTaskProps) => {
   return (
     <div className="space-y-1">
       <InputLabel htmlFor={rest.id}>{label}</InputLabel>
@@ -15,11 +20,6 @@ const InputAddTask = ({ label, error, ...rest }) => {
       {error && <p className="text-xs pt-1 text-red-500">{error.message}</p>}
     </div>
   );
-};
-
-InputAddTask.propTypes = {
-  label: PropTypes.string.isRequired,
-  error: PropTypes.string,
 };
 
 export default InputAddTask;

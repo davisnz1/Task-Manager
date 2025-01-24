@@ -1,6 +1,10 @@
 import InputLabel from "./InputLabel";
+import { SelectHTMLAttributes } from "react";
+import React from "react";
 
-const DialogSelect = (props) => {
+interface DialogSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {}
+
+const DialogSelect = (props: DialogSelectProps) => {
   return (
     <div>
       <InputLabel htmlFor="time">Horário</InputLabel>
