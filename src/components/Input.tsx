@@ -27,6 +27,10 @@ const InputTask = forwardRef<HTMLInputElement, InputTaskProps>(
           className={`w-full px-4 py-3 rounded-lg outline-brand-primary placeholder:text-sm placeholder:text-brand-text-gray ${
             variantStyles[variant as keyof typeof variantStyles]
           }`}
+          style={{
+            verticalAlign: "top",
+            lineHeight: "1.5",
+          }}
           type="text"
           {...rest}
         />

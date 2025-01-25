@@ -9,7 +9,7 @@ const config: Config = {
     extend: {
       colors: {
         brand: {
-          "dark-blue": "#AEAFB1",
+          "dark-blue": "#D9D9D9",
           primary: "#00ADB5",
           primaryhover: "#00A3A9",
           "primary-info": "#ececec",

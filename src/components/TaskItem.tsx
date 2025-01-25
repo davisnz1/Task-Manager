@@ -6,9 +6,10 @@ import { toast } from "sonner";
 import { AboutButton, CheckIcon, LoaderIcon, TrashIcon } from "../assets/icons";
 import Button from "./Button";
 import axios from "axios";
+import { useNavigate } from "react-router";
 
 interface Task {
-  id: number;
+  id: string;
   title: string;
   description?: string;
   time: "morning" | "afternoon" | "evening";
@@ -17,8 +18,8 @@ interface Task {
 
 interface TaskItemProps {
   task: Task;
-  onDeleteSucess: (taskId: number) => void;
-  handleCheckboxClick: (taskId: number) => void;
+  onDeleteSucess: (taskId: string) => void;
+  handleCheckboxClick: (taskId: string) => void;
 }
 
 const TaskItem = ({
@@ -27,6 +28,8 @@ const TaskItem = ({
   handleCheckboxClick,
 }: TaskItemProps) => {
   const [deleteIsLoading, setDeleteIsLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleDeleteClick = async () => {
     setDeleteIsLoading(true);
@@ -54,6 +57,10 @@ const TaskItem = ({
     }
   };
 
+  const handleAboutClick = (task: Task) => {
+    navigate(`/task/${task.id}`);
+  };
+
   return (
     <div
       className={`flex bg-opacity-10 items-center mx-6 my-3 gap-2 px-4 py-3 text-sm rounded-lg ${getStatusClasses()} `}
@@ -74,7 +81,7 @@ const TaskItem = ({
       </label>
       <div className="flex w-full justify-between">
         {task.title}
-        <a href="#" className="flex items-center">
+        <a className="flex items-center">
           <Button
             color="ghost"
             onClick={handleDeleteClick}
@@ -86,7 +93,7 @@ const TaskItem = ({
               <TrashIcon className="bg-transparent" />
             )}
           </Button>
-          <AboutButton />
+          <AboutButton onClick={() => handleAboutClick(task)} />
         </a>
       </div>
     </div>

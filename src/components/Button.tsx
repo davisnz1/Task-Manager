@@ -4,8 +4,8 @@ import React from "react";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  size?: "small" | "big";
-  color?: "primary" | "ghost" | "delete";
+  size?: "small" | "big" | "smallInfo";
+  color?: "primary" | "ghost" | "delete" | "ghostInfo";
   className?: string;
 }
 
@@ -21,12 +21,15 @@ const Button = ({
     variants: {
       color: {
         primary:
-          "bg-brand-primary text-white hover:bg-brand-primaryhover transition-colors",
+          "bg-brand-primary text-white justify-center hover:bg-brand-primaryhover transition-colors",
         ghost: "bg-transparent text-brand-dark-gray",
+        ghostInfo:
+          "bg-brand-primary-info hover:bg-[#d4d4d4] transition-colors text-black",
         delete: "bg-[#EF4444] text-white hover:bg-[#bf3333]",
       },
       size: {
         small: "px-3 py-1 text-xs",
+        smallInfo: "w-[90px] h-[36px] px-3 py-1 text-xs",
         big: "py-2 px-12",
       },
     },

@@ -3,7 +3,7 @@ import React from "react";
 interface InputLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   children: React.ReactNode;
   textSize?: string;
-  variant?: "add" | "info" | "tertiary"; // Adicionando a variante
+  variant?: "add" | "info" | "tertiary";
 }
 
 const InputLabel: React.FC<InputLabelProps> = ({
@@ -15,6 +15,7 @@ const InputLabel: React.FC<InputLabelProps> = ({
   const variantStyles = {
     add: "text-black",
     info: "text-black",
+    infoDescription: "text-black",
     tertiary: "text-blue-700",
   };
 
