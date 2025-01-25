@@ -8,6 +8,7 @@ import Moon from "../icons/moon.svg?react";
 import Sun from "../icons/sun.svg?react";
 import TaskIcon from "../icons/tasks.svg?react";
 import TrashIcon from "../icons/trash.svg?react";
+import ButtonBack from "../icons/button-back.svg?react";
 
 export {
   AboutButton,
@@ -20,4 +21,5 @@ export {
   Sun,
   TaskIcon,
   TrashIcon,
+  ButtonBack,
 };

@@ -6,39 +6,36 @@ import AddTaskDialog from "./AddTaskDialog";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
 import TasksSeparator from "./TasksSeparator";
+import axios from "axios";
 
 interface Task {
-  id: number; // Assegure-se de que o `id` seja do tipo número
+  id: number;
   title: string;
   status: "not_started" | "in_progress" | "done";
   time: "morning" | "afternoon" | "evening";
 }
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState<Task[]>([]); // Define que tasks é um array de Task
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [addTasksDialogIsOpen, setAddTasksDialogIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await fetch("http://localhost:3000/tasks", {
-          method: "GET",
-        });
+        const response = await axios.get("http://localhost:3000/tasks");
 
-        if (!response.ok) {
+        if (response.status !== 200) {
           toast.error("Erro ao carregar tarefas.");
           return;
         }
 
-        const fetchedTasks: Task[] = await response.json();
-
-        // Verifica se o status é válido
+        const fetchedTasks: Task[] = response.data;
         const validatedTasks: Task[] = fetchedTasks.map((task) => ({
           ...task,
           status: task.status as "not_started" | "in_progress" | "done",
         }));
 
-        setTasks(validatedTasks); // Atualiza o estado com os dados validados
+        setTasks(validatedTasks);
       } catch (error) {
         toast.error("Erro ao carregar tarefas.");
       }
@@ -54,22 +51,24 @@ const Tasks = () => {
   };
 
   const handleAddTaskSubmit = async (task: Task): Promise<void> => {
-    const response = await fetch("http://localhost:3000/tasks", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(task),
-    });
+    try {
+      const response = await axios.post("http://localhost:3000/tasks", task, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    if (!response.ok) {
+      if (response.status !== 201) {
+        toast.error("Erro ao adicionar a tarefa. Tente novamente");
+        return;
+      }
+
+      const newTask: Task = response.data;
+      setTasks((prevTasks) => [...prevTasks, newTask]);
+      toast.success("Tarefa Adicionada com Sucesso");
+    } catch (error) {
       toast.error("Erro ao adicionar a tarefa. Tente novamente");
-      return;
     }
-
-    const newTask: Task = await response.json();
-    setTasks((prevTasks) => [...prevTasks, newTask]);
-    toast.success("Tarefa Adicionada com Sucesso");
   };
 
   const handleTaskCheckboxClick = (taskId: number) => {

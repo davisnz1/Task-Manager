@@ -1,25 +1,43 @@
+import React, { forwardRef } from "react";
 import InputLabel from "./InputLabel";
-import React from "react";
 
-interface InputAddTaskProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+type Variant = "add" | "info" | "tertiary";
+
+interface InputTaskProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  error?: { message: string };
+  error?: string | { message: string };
+  variant?: Variant;
 }
 
-const InputAddTask = ({ label, error, ...rest }: InputAddTaskProps) => {
-  return (
-    <div className="space-y-1">
-      <InputLabel htmlFor={rest.id}>{label}</InputLabel>
-      <input
-        className="w-full px-4 py-3 border-solid border border-[#ECECEC] rounded-lg outline-brand-primary
-        placeholder:text-sm placeholder:text-brand-text-gray"
-        type="text"
-        {...rest}
-      />
-      {error && <p className="text-xs pt-1 text-red-500">{error.message}</p>}
-    </div>
-  );
-};
+const InputTask = forwardRef<HTMLInputElement, InputTaskProps>(
+  ({ label, error, variant = "add", ...rest }, ref) => {
+    const variantStyles = {
+      add: "bg-white border-[#ECECEC] text-black",
+      info: "bg-brand-primary-info border border-[#adadad] text-black",
+      tertiary: "bg-blue-100 border-[#3B82F6] text-blue-700",
+    };
 
-export default InputAddTask;
+    return (
+      <div className="space-y-1">
+        <InputLabel htmlFor={rest.id} variant={variant}>
+          {label}
+        </InputLabel>
+        <input
+          ref={ref}
+          className={`w-full px-4 py-3 rounded-lg outline-brand-primary placeholder:text-sm placeholder:text-brand-text-gray ${
+            variantStyles[variant as keyof typeof variantStyles]
+          }`}
+          type="text"
+          {...rest}
+        />
+        {error && (
+          <p className="text-xs pt-1 text-red-500">
+            {typeof error === "string" ? error : error.message}
+          </p>
+        )}
+      </div>
+    );
+  }
+);
+
+export default InputTask;

@@ -1,26 +1,46 @@
+import React, { forwardRef, SelectHTMLAttributes } from "react";
 import InputLabel from "./InputLabel";
-import { SelectHTMLAttributes } from "react";
-import React from "react";
 
-interface DialogSelectProps extends SelectHTMLAttributes<HTMLSelectElement> {}
+type Variant = "default" | "primary" | "secondary";
+type InputSize = "small" | "medium" | "large";
 
-const DialogSelect = (props: DialogSelectProps) => {
-  return (
-    <div>
-      <InputLabel htmlFor="time">Horário</InputLabel>
+interface DialogSelectProps
+  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> {
+  variant?: Variant;
+  inputSize?: InputSize;
+}
 
-      <select
-        id="time"
-        className="w-full px-4 mt-1 py-3 border-solid border border-[#ECECEC] rounded-lg outline-brand-primary 
-                    placeholder:text-sm placeholder:text-brand-text-gray"
-        {...props}
-      >
-        <option value="morning">Manhã</option>
-        <option value="afternoon">Tarde</option>
-        <option value="evening">Noite</option>
-      </select>
-    </div>
-  );
-};
+const DialogSelect = forwardRef<HTMLSelectElement, DialogSelectProps>(
+  (
+    { variant = "default", inputSize = "medium", id = "time", ...props },
+    ref
+  ) => {
+    const variantStyles = {
+      default: "border-[#ECECEC] bg-white",
+      primary: "border-brand-primary bg-brand-light",
+      secondary:
+        "w-full px-4 py-3 border-solid border bg-brand-primary-info border-[#c2c2c2] rounded-lg outline-brand-primary text-brand-light-gray ",
+    };
+
+    const sizeStyles = {
+      small: "py-2 px-3 text-sm",
+      medium: "py-3 px-4 text-base",
+      large: "py-4 px-5 text-lg",
+    };
+
+    const selectClass = `w-full rounded-lg outline-brand-primary ${variantStyles[variant]} ${sizeStyles[inputSize]} placeholder:text-sm placeholder:text-brand-text-gray`;
+
+    return (
+      <div>
+        <InputLabel htmlFor={id}>Horário</InputLabel>
+        <select ref={ref} id={id} className={selectClass} {...props}>
+          <option value="morning">Manhã</option>
+          <option value="afternoon">Tarde</option>
+          <option value="evening">Noite</option>
+        </select>
+      </div>
+    );
+  }
+);
 
 export default DialogSelect;

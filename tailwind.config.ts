@@ -11,8 +11,10 @@ const config: Config = {
         brand: {
           "dark-blue": "#AEAFB1",
           primary: "#00ADB5",
+          primaryhover: "#00A3A9",
+          "primary-info": "#ececec",
           "dark-gray": "#818181",
-          "light-gray": "#EEEEEE",
+          "light-gray": "#848484",
           white: "#FFFFFF",
           background: "#F8F8F8",
           process: "#FFAA04",

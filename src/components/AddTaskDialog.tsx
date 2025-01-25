@@ -1,10 +1,9 @@
 import "./AddTaskDialog.css";
-import React from "react";
-
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import { v4 } from "uuid";
+import { useForm, Controller } from "react-hook-form";
 
 import Button from "./Button";
 import DialogSelect from "./DialogSelect";
@@ -24,78 +23,41 @@ interface Task {
   status: "not_started" | "in_progress" | "done";
 }
 
-interface Error {
-  inputName: string;
-  message: string;
-}
-
 const AddTaskDialog = ({
   isOpen,
   handleClose,
   handleSubmit,
 }: AddTaskDialogProps) => {
-  const [title, setTitle] = useState<string>("");
-  const [time, setTime] = useState<"morning" | "afternoon" | "evening">(
-    "morning"
-  );
-  const [description, setDescription] = useState<string>("");
-  const [errors, setErrors] = useState<Error[]>([]);
-
   const nodeRef = useRef<HTMLDivElement>(null);
+
+  const {
+    register,
+    handleSubmit: formSubmit,
+    reset,
+    control,
+    formState: { errors },
+  } = useForm<Task>({
+    defaultValues: {
+      title: "",
+      description: "",
+      time: "morning",
+    },
+  });
 
   useEffect(() => {
     if (!isOpen) {
-      setTitle("");
-      setTime("morning");
-      setDescription("");
+      reset();
     }
-  }, [isOpen]);
+  }, [isOpen, reset]);
 
-  const handleSaveClick = () => {
-    const newErrors: Error[] = [];
-
-    if (!title.trim()) {
-      newErrors.push({
-        inputName: "title",
-        message: "O Título é obrigatório",
-      });
-    }
-
-    if (!time.trim()) {
-      newErrors.push({
-        inputName: "time",
-        message: "O tempo é obrigatório",
-      });
-    }
-
-    if (!description.trim()) {
-      newErrors.push({
-        inputName: "description",
-        message: "A descrição é obrigatória",
-      });
-    }
-
-    setErrors(newErrors);
-
-    if (newErrors.length > 0) {
-      return;
-    }
-
+  const onSubmit = (data: Task) => {
     handleSubmit({
+      ...data,
       id: v4(),
-      title,
-      description,
-      time,
       status: "not_started",
     });
-
     handleClose();
   };
-
-  const titleError = errors.find((error) => error.inputName === "title");
-  const descriptionError = errors.find(
-    (error) => error.inputName === "description"
-  );
 
   return (
     <CSSTransition
@@ -119,50 +81,54 @@ const AddTaskDialog = ({
                 </p>
               </div>
 
-              <div className="flex flex-col gap-4">
+              <form
+                onSubmit={formSubmit(onSubmit)}
+                className="flex flex-col gap-4"
+              >
                 <Input
-                  label="Titulo"
+                  label="Título"
                   placeholder="Título da tarefa"
-                  value={title}
-                  onChange={(event) => setTitle(event.target.value)}
-                  error={titleError}
+                  error={errors.title?.message}
+                  {...register("title", {
+                    required: "O Título é obrigatório",
+                  })}
                 />
 
-                <DialogSelect
-                  value={time}
-                  onChange={(event) =>
-                    setTime(
-                      event.target.value as "morning" | "afternoon" | "evening"
-                    )
-                  }
+                <Controller
+                  control={control}
+                  name="time"
+                  rules={{ required: "O tempo é obrigatório" }}
+                  render={({ field }) => (
+                    <DialogSelect
+                      {...field}
+                      onChange={(e) => field.onChange(e.target.value)}
+                    />
+                  )}
                 />
 
                 <Input
                   label="Descrição"
                   placeholder="Descreva a Tarefa"
-                  value={description}
-                  onChange={(event) => setDescription(event.target.value)}
-                  error={descriptionError}
+                  error={errors.description?.message}
+                  {...register("description", {
+                    required: "A descrição é obrigatória",
+                  })}
                 />
-              </div>
 
-              <div className="flex mt-4 gap-3 justify-center font-semibold flex-row">
-                <Button
-                  className="bg-[#EEEEEE] text-black"
-                  size="big"
-                  color="ghost"
-                  onClick={handleClose}
-                >
-                  Cancelar
-                </Button>
-                <Button
-                  size="big"
-                  color="primary"
-                  onClick={() => handleSaveClick()}
-                >
-                  Salvar
-                </Button>
-              </div>
+                <div className="flex mt-4 gap-3 justify-center font-semibold flex-row">
+                  <Button
+                    className="bg-[#EEEEEE] text-black"
+                    size="big"
+                    color="ghost"
+                    onClick={handleClose}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button size="big" color="primary" type="submit">
+                    Salvar
+                  </Button>
+                </div>
+              </form>
             </div>
           </div>,
           document.body

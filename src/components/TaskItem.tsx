@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 import { AboutButton, CheckIcon, LoaderIcon, TrashIcon } from "../assets/icons";
 import Button from "./Button";
+import axios from "axios";
 
 interface Task {
   id: number;
@@ -29,17 +30,16 @@ const TaskItem = ({
 
   const handleDeleteClick = async () => {
     setDeleteIsLoading(true);
-    const response = await fetch(`http://localhost:3000/tasks/${task.id}`, {
-      method: "DELETE",
-    });
 
-    if (!response.ok) {
+    try {
+      await axios.delete(`http://localhost:3000/tasks/${task.id}`);
+      onDeleteSucess(task.id);
+      toast.success("Tarefa deletada com sucesso");
+    } catch (error) {
+      toast.error("Erro ao deletar a tarefa");
+    } finally {
       setDeleteIsLoading(false);
-      return toast.error("Erro ao deletar a tarefa");
     }
-
-    onDeleteSucess(task.id);
-    setDeleteIsLoading(false);
   };
 
   const getStatusClasses = () => {
