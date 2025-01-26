@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { ButtonBack, TrashIcon } from "../assets/icons";
 import Button from "../components/Button";
 import TaskInfoDetails from "./TaskInfoDetails";
-import { useNavigate } from "react-router";
 import {
-  Task,
+  handleSaveTaskEdit,
   onTaskDeleteSuccess,
   useFetchTaskDetails,
-} from "../lib/AllFunctions";
+} from "../lib/TasksFunctions";
+import { Task, TaskInfoDetailsHandle } from "../lib/Types";
+import { toast } from "sonner";
 
 const TaskInfo = () => {
   const { taskId } = useParams<{ taskId: string }>();
   const { task, error } = useFetchTaskDetails(taskId as string);
   const [tasks, setTasks] = useState<Task[]>([]);
   const navigate = useNavigate();
+
+  const taskFormRef = useRef<TaskInfoDetailsHandle | null>(null);
 
   const handleBackClick = () => {
     navigate(-1);
@@ -27,6 +30,9 @@ const TaskInfo = () => {
   if (!task) {
     return <p>Carregando...</p>;
   }
+  if (!taskId) {
+    return <p>ID da tarefa não encontrado.</p>;
+  }
 
   const handleDeleteClick = () => {
     if (task) {
@@ -35,10 +41,28 @@ const TaskInfo = () => {
     }
   };
 
+  const handleSave = (updatedTask: Task) => {
+    handleSaveTaskEdit(taskId, updatedTask, tasks, setTasks)
+      .then(() => {
+        toast.success("Tarefa editada com sucesso!");
+        navigate(-1);
+      })
+      .catch((error) => {
+        toast.error("Erro ao editar a tarefa: " + error.message);
+      });
+  };
+
+  const handleManualSave = () => {
+    if (taskFormRef.current) {
+      const updatedTask = taskFormRef.current.getUpdatedTask();
+      handleSave(updatedTask);
+    }
+  };
+
   return (
     <div className="flex w-full">
       <div className="flex w-full font-poppins flex-col gap-4 p-10">
-        <ButtonBack onClick={() => handleBackClick()} className="w-9 h-9" />
+        <ButtonBack onClick={handleBackClick} className="w-9 h-9" />
         <div className="flex items-center gap-1">
           <p className="text-sm font-base text-gray-500">Minhas tasks {">"}</p>
           <h1 className="text-sm text-brand-primary font-semibold">
@@ -52,12 +76,12 @@ const TaskInfo = () => {
             Deletar Tarefa
           </Button>
         </div>
-        <TaskInfoDetails task={task} />
+        <TaskInfoDetails ref={taskFormRef} task={task} onSave={handleSave} />
         <div className="flex justify-end gap-4">
           <Button onClick={handleBackClick} size="smallInfo" color="ghostInfo">
             Cancelar
           </Button>
-          <Button size="smallInfo" color="primary">
+          <Button size="smallInfo" color="primary" onClick={handleManualSave}>
             Salvar
           </Button>
         </div>

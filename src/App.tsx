@@ -3,7 +3,7 @@ import React from "react";
 import { Toaster } from "sonner";
 
 import Sidebar from "./components/Sidebar";
-import Tasks from "./components/Tasks";
+import TaskHome from "./components/TaskHome";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         }}
       />
       <Sidebar />
-      <Tasks />
+      <TaskHome />
     </div>
   );
 }

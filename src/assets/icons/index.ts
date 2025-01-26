@@ -9,6 +9,9 @@ import Sun from "../icons/sun.svg?react";
 import TaskIcon from "../icons/tasks.svg?react";
 import TrashIcon from "../icons/trash.svg?react";
 import ButtonBack from "../icons/button-back.svg?react";
+import ListCheck from "../icons/list-checks.svg?react";
+import LayoutList from "../icons/layout-list.svg?react";
+import GlassCup from "../icons/glass-water.svg?react";
 
 export {
   AboutButton,
@@ -22,4 +25,7 @@ export {
   TaskIcon,
   TrashIcon,
   ButtonBack,
+  LayoutList,
+  ListCheck,
+  GlassCup,
 };

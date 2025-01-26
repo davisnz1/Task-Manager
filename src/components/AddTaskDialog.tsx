@@ -4,24 +4,10 @@ import { createPortal } from "react-dom";
 import { CSSTransition } from "react-transition-group";
 import { v4 } from "uuid";
 import { useForm, Controller } from "react-hook-form";
-
+import { AddTaskDialogProps, Task } from "../lib/Types";
 import Button from "./Button";
 import DialogSelect from "./DialogSelect";
 import Input from "./Input";
-
-interface AddTaskDialogProps {
-  isOpen: boolean;
-  handleClose: () => void;
-  handleSubmit: (task: Task) => Promise<void>;
-}
-
-interface Task {
-  id: any;
-  title: string;
-  description: string;
-  time: "morning" | "afternoon" | "evening";
-  status: "not_started" | "in_progress" | "done";
-}
 
 const AddTaskDialog = ({
   isOpen,

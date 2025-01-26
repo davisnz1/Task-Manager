@@ -1,10 +1,5 @@
 import React from "react";
-
-interface InputLabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  children: React.ReactNode;
-  textSize?: string;
-  variant?: "add" | "info" | "tertiary";
-}
+import { InputLabelProps } from "../lib/Types";
 
 const InputLabel: React.FC<InputLabelProps> = ({
   children,

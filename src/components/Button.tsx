@@ -1,13 +1,6 @@
-import { ButtonHTMLAttributes, ReactNode } from "react";
 import { tv } from "tailwind-variants";
 import React from "react";
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  children: ReactNode;
-  size?: "small" | "big" | "smallInfo";
-  color?: "primary" | "ghost" | "delete" | "ghostInfo";
-  className?: string;
-}
+import { ButtonProps } from "../lib/Types";
 
 const Button = ({
   children,
@@ -25,6 +18,7 @@ const Button = ({
         ghost: "bg-transparent text-brand-dark-gray",
         ghostInfo:
           "bg-brand-primary-info hover:bg-[#d4d4d4] transition-colors text-black",
+
         delete: "bg-[#EF4444] text-white hover:bg-[#bf3333]",
       },
       size: {

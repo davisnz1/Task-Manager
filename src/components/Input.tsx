@@ -1,13 +1,7 @@
 import React, { forwardRef } from "react";
 import InputLabel from "./InputLabel";
 
-type Variant = "add" | "info" | "tertiary";
-
-interface InputTaskProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label: string;
-  error?: string | { message: string };
-  variant?: Variant;
-}
+import { InputTaskProps } from "../lib/Types";
 
 const InputTask = forwardRef<HTMLInputElement, InputTaskProps>(
   ({ label, error, variant = "add", ...rest }, ref) => {

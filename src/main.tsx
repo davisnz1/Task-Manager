@@ -6,11 +6,16 @@ import "./index.css";
 
 import TaskDetailsPage from "./pages/task-details";
 import App from "./App";
+import TasksPage from "./pages/tasks-page";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+  },
+  {
+    path: "/task",
+    element: <TasksPage />,
   },
   {
     path: "/task/:taskId",

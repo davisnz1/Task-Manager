@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-
 import { AddIcon, Afternoon, Moon, Sun, TrashIcon } from "../assets/icons";
 import AddTaskDialog from "./AddTaskDialog";
 import {
-  Task,
   handleAddTaskSubmit,
   onTaskDeleteSuccess,
   fetchTasks,
   handleTaskCheckboxClick,
-} from "../lib/AllFunctions";
+} from "../lib/TasksFunctions";
+import { Task } from "../lib/Types";
 import Button from "./Button";
 import TaskItem from "./TaskItem";
 import TasksSeparator from "./TasksSeparator";
@@ -65,6 +64,7 @@ const Tasks = () => {
         <TasksSeparator icon={<Sun />} title="Manhã" />
         {morningTasks.map((task) => (
           <TaskItem
+            type="all"
             key={task.id}
             task={task}
             handleCheckboxClick={(taskId: string) =>
@@ -77,6 +77,7 @@ const Tasks = () => {
         <TasksSeparator icon={<Afternoon />} title="Tarde" />
         {afternoonTasks.map((task) => (
           <TaskItem
+            type="all"
             key={task.id}
             task={task}
             handleCheckboxClick={(taskId: string) =>
@@ -89,6 +90,7 @@ const Tasks = () => {
         <TasksSeparator icon={<Moon />} title="Noite" />
         {eveningTasks.map((task) => (
           <TaskItem
+            type="all"
             key={task.id}
             task={task}
             handleCheckboxClick={(taskId: string) =>

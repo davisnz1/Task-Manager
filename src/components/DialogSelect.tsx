@@ -1,14 +1,6 @@
-import React, { forwardRef, SelectHTMLAttributes } from "react";
+import React, { forwardRef } from "react";
 import InputLabel from "./InputLabel";
-
-type Variant = "default" | "primary" | "secondary";
-type InputSize = "small" | "medium" | "large";
-
-interface DialogSelectProps
-  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, "size"> {
-  variant?: Variant;
-  inputSize?: InputSize;
-}
+import { DialogSelectProps } from "../lib/Types";
 
 const DialogSelect = forwardRef<HTMLSelectElement, DialogSelectProps>(
   (
@@ -19,7 +11,7 @@ const DialogSelect = forwardRef<HTMLSelectElement, DialogSelectProps>(
       default: "border-[#ECECEC] bg-white",
       primary: "border-brand-primary bg-brand-light",
       secondary:
-        "w-full px-4 py-3 border-solid border bg-brand-primary-info border-[#c2c2c2] rounded-lg outline-brand-primary text-brand-light-gray ",
+        "w-full px-4 py-3 border-solid border bg-brand-primary-info border-[#c2c2c2] rounded-lg outline-brand-primary text-black ",
     };
 
     const sizeStyles = {

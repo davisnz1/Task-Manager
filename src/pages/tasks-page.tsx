@@ -1,13 +1,13 @@
 import React from "react";
 
-import Sidebar from "../components/Sidebar";
-
-import TaskInfo from "../components/TaskInfo";
 import { Toaster } from "sonner";
 
-const TaskDetailsPage = () => {
+import Sidebar from "../components/Sidebar";
+import Tasks from "../components/Tasks";
+
+const TasksPage = () => {
   return (
-    <div className="flex w-full">
+    <div className="flex">
       <Toaster
         toastOptions={{
           style: {
@@ -16,9 +16,9 @@ const TaskDetailsPage = () => {
         }}
       />
       <Sidebar />
-      <TaskInfo />
+      <Tasks />
     </div>
   );
 };
 
-export default TaskDetailsPage;
+export default TasksPage;
